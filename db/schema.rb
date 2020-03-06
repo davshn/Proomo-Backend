@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_06_100314) do
+ActiveRecord::Schema.define(version: 2020_03_06_140337) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,20 +56,20 @@ ActiveRecord::Schema.define(version: 2020_03_06_100314) do
   end
 
   create_table "info_admin_brands", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "admin_brand_id", null: false
     t.bigint "commerce_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["admin_brand_id"], name: "index_info_admin_brands_on_admin_brand_id"
     t.index ["commerce_id"], name: "index_info_admin_brands_on_commerce_id"
-    t.index ["user_id"], name: "index_info_admin_brands_on_user_id"
   end
 
   create_table "info_clients", force: :cascade do |t|
-    t.bigint "user_id", null: false
+    t.bigint "client_id", null: false
     t.string "full_name"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_info_clients_on_user_id"
+    t.index ["client_id"], name: "index_info_clients_on_client_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -81,9 +81,20 @@ ActiveRecord::Schema.define(version: 2020_03_06_100314) do
   end
 
   create_table "offers", force: :cascade do |t|
+    t.bigint "commerce_id", null: false
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["commerce_id"], name: "index_offers_on_commerce_id"
+  end
+
+  create_table "product_categories", force: :cascade do |t|
+    t.bigint "category_id", null: false
+    t.bigint "product_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_product_categories_on_category_id"
+    t.index ["product_id"], name: "index_product_categories_on_product_id"
   end
 
   create_table "products", force: :cascade do |t|
@@ -106,11 +117,13 @@ ActiveRecord::Schema.define(version: 2020_03_06_100314) do
 
   create_table "purchase_items", force: :cascade do |t|
     t.bigint "product_id", null: false
+    t.bigint "purchace_id", null: false
     t.decimal "quantity", default: "1.0", null: false
     t.decimal "unit_price", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["product_id"], name: "index_purchase_items_on_product_id"
+    t.index ["purchace_id"], name: "index_purchase_items_on_purchace_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -131,9 +144,12 @@ ActiveRecord::Schema.define(version: 2020_03_06_100314) do
   add_foreign_key "favorites", "products"
   add_foreign_key "favorites", "users", column: "client_id"
   add_foreign_key "info_admin_brands", "commerces"
-  add_foreign_key "info_admin_brands", "users"
-  add_foreign_key "info_clients", "users"
+  add_foreign_key "info_admin_brands", "users", column: "admin_brand_id"
+  add_foreign_key "info_clients", "users", column: "client_id"
   add_foreign_key "notifications", "users", column: "client_id"
+  add_foreign_key "offers", "commerces"
+  add_foreign_key "product_categories", "products"
+  add_foreign_key "product_categories", "users", column: "category_id"
   add_foreign_key "products", "commerces"
   add_foreign_key "purchaces", "users", column: "client_id"
 end

@@ -1,15 +1,15 @@
-class Api::V1::CouponsController < ApplicationController
+class Api::V1::FavoritesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    all_coupons = Coupon.all
-    render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito', data: all_coupons}
+    all_favorites = Favorite.all
+    render json: {data: all_favorites}, status: 200
   end
 
   def new
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new
+        favorite = Favorite.new
       end
     rescue
       raise
@@ -19,11 +19,11 @@ class Api::V1::CouponsController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new(coupon_params)
-        if coupon.save
-          render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito'}
+        favorite = Favorite.new(favorite_params)
+        if favorite.save
+          render json: { message: 'Se ha añadido a favoritos con éxito'}, status: 201
         else
-          render json: { status: 'ERROR', message: 'Ocurrió un error'}
+          render json: { message: 'Ocurrió un error'}, status: 400
         end
       end
     rescue
@@ -51,9 +51,9 @@ class Api::V1::CouponsController < ApplicationController
 
   private
 
-  def coupon_params
+  def favorite_params
     params.require(:data).permit(
-      attributes: Coupon.get_params
+      attributes: Favorite.get_params
     )
   end
 

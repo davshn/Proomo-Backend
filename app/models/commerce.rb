@@ -1,4 +1,6 @@
 class Commerce < ApplicationRecord
+  has_many :products
+  has_many :offers
 
   def self.get_params(exclude = [])
     params = [

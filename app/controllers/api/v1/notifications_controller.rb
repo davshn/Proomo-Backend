@@ -1,15 +1,15 @@
-class Api::V1::CouponsController < ApplicationController
+class Api::V1::NotificationsController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    all_coupons = Coupon.all
-    render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito', data: all_coupons}
+    all_notifications = Notification.all
+    render json: {data: all_notifications}, status: 200
   end
 
   def new
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new
+        notification = Notification.new
       end
     rescue
       raise
@@ -19,11 +19,11 @@ class Api::V1::CouponsController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new(coupon_params)
-        if coupon.save
-          render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito'}
+        notification = Notification.new(notification_params)
+        if notification.save
+          render json: { message: 'La notificación ha sido creada con éxito'}, status: 201
         else
-          render json: { status: 'ERROR', message: 'Ocurrió un error'}
+          render json: { message: 'Ocurrió un error'}, status: 400
         end
       end
     rescue
@@ -51,10 +51,9 @@ class Api::V1::CouponsController < ApplicationController
 
   private
 
-  def coupon_params
+  def notification_params
     params.require(:data).permit(
-      attributes: Coupon.get_params
+      attributes: Notification.get_params
     )
   end
-
 end

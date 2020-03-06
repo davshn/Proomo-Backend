@@ -3,7 +3,7 @@ class Api::V1::CommercesController < ApplicationController
 
   def index
     all_commerces = Commerce.all
-    render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito', data: all_commerces}
+    render json: {data: all_commerces}, status: 200
   end
 
   def new
@@ -11,18 +11,36 @@ class Api::V1::CommercesController < ApplicationController
   end
 
   def create
-    commerce = Commerce.new(commerce_params)
-    if commerce.save
-      render json: { status: 'SUCCESS', message: 'El comercio ha sido creado con éxito'}
-    else
-      render json: { status: 'ERROR', message: 'Ocurrió un error'}
+    begin
+      ActiveRecord::Base.transaction do
+        commerce = Commerce.new(commerce_params)
+        if commerce.save
+          render json: { message: 'El comercio ha sido creado con éxito'}, status: 201
+        else
+          render json: {message: 'Ocurrió un error'}, status: 400
+        end
+      end
+    rescue
+      raise
     end
   end
 
   def update
+    begin
+      ActiveRecord::Base.transaction do
+      end
+    rescue
+      raise
+    end
   end
 
   def edit
+    begin
+      ActiveRecord::Base.transaction do
+      end
+    rescue
+      raise
+    end
   end
 
   private

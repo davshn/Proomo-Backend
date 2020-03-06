@@ -1,8 +1,9 @@
 class InfoClient < ApplicationRecord
+  belongs_to :client
   def self.get_params(exclude = [])
     params = [
       :id,
-      :user_id,
+      :client_id,
       :full_name
     ]
   end

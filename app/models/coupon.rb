@@ -1,4 +1,7 @@
 class Coupon < ApplicationRecord
+  belongs_to :client
+  belongs_to :offer
+  
   def self.get_params(exclude = [])
     params = [
       :id,
@@ -8,6 +11,6 @@ class Coupon < ApplicationRecord
     ]
   end
 
-  
+
   mount_base64_uploader :image, ImageUploader
 end

@@ -1,15 +1,15 @@
-class Api::V1::CouponsController < ApplicationController
+class Api::V1::CategoriesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    all_coupons = Coupon.all
-    render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito', data: all_coupons}
+    all_categories = Category.all
+    render json: {data: all_categories}, status: 200
   end
 
   def new
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new
+        category = Category.new
       end
     rescue
       raise
@@ -19,11 +19,11 @@ class Api::V1::CouponsController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        coupon = Coupon.new(coupon_params)
-        if coupon.save
-          render json: { status: 'SUCCESS', message: 'El cupón ha sido creado con éxito'}
+        category = Category.new(category_params)
+        if category.save
+          render json: { message: 'La categoría ha sido creado con éxito'}, status: 201
         else
-          render json: { status: 'ERROR', message: 'Ocurrió un error'}
+          render json: { message: 'Ocurrió un error'}, status: 400
         end
       end
     rescue
@@ -51,9 +51,9 @@ class Api::V1::CouponsController < ApplicationController
 
   private
 
-  def coupon_params
+  def category_params
     params.require(:data).permit(
-      attributes: Coupon.get_params
+      attributes: Category.get_params
     )
   end
 
