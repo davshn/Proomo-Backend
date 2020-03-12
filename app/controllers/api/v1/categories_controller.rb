@@ -20,7 +20,7 @@ class Api::V1::CategoriesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         category = Category.new(category_params)
-        binding.pry
+        # binding.pry
         if category.save
           render json: { message: 'La categoría ha sido creado con éxito'}, status: 201
         else
