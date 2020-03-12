@@ -4,6 +4,6 @@ class Advertisement < ApplicationRecord
       :id,
       :image
     ]
-    mount_base64_uploader :image, ImageUploader
   end
+  mount_base64_uploader :image, ImageUploader
 end
