@@ -83,6 +83,6 @@ test:
 #
 production:
   <<: *default
-  database: Proomo_back_production
-  username: Proomo_back
-  password: <%= ENV['PROOMO_BACK_DATABASE_PASSWORD'] %>
+  database: proomo_back_production
+  username: proomo_back
+  password: ProomoBack
