@@ -1,6 +1,6 @@
 class Category < ApplicationRecord
   has_many :product_categories
-  has_many :products, through: :product_categories  
+  has_many :products, through: :product_categories
 
   def self.get_params(exclude = [])
     params = [
@@ -8,7 +8,7 @@ class Category < ApplicationRecord
       :name,
       :image
     ]
-    mount_base64_uploader :image, ImageUploader
   end
 
+  mount_base64_uploader :image, ImageUploader
 end

@@ -43,6 +43,17 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def show
+    begin
+      ActiveRecord::Base.transaction do
+        commerce = Commerce.find(params[:id])
+        render json: {data: commerce}, status: 200
+      end
+    rescue
+      raise
+    end
+  end
+
   private
 
   def commerce_params
