@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_06_140337) do
+ActiveRecord::Schema.define(version: 2020_04_21_232250) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,6 +19,12 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
     t.string "image", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "advertisement_type"
+    t.bigint "commerce_id"
+    t.string "title"
+    t.string "text"
+    t.integer "link"
+    t.index ["commerce_id"], name: "index_advertisements_on_commerce_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -29,11 +35,28 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
     t.index ["name"], name: "index_categories_on_name"
   end
 
+  create_table "categories_commerces", id: false, force: :cascade do |t|
+    t.bigint "commerce_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_categories_commerces_on_category_id"
+    t.index ["commerce_id"], name: "index_categories_commerces_on_commerce_id"
+  end
+
+  create_table "categories_offers", id: false, force: :cascade do |t|
+    t.bigint "offer_id"
+    t.bigint "category_id"
+    t.index ["category_id"], name: "index_categories_offers_on_category_id"
+    t.index ["offer_id"], name: "index_categories_offers_on_offer_id"
+  end
+
   create_table "commerces", force: :cascade do |t|
     t.string "name", null: false
     t.string "image", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.float "score"
+    t.boolean "published", default: false
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -73,11 +96,13 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.bigint "client_id", null: false
+    t.bigint "commerce_id", null: false
     t.string "text", null: false
+    t.string "title", null: false
+    t.boolean "published", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["client_id"], name: "index_notifications_on_client_id"
+    t.index ["commerce_id"], name: "index_notifications_on_commerce_id"
   end
 
   create_table "offers", force: :cascade do |t|
@@ -85,6 +110,10 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "description"
+    t.string "terms_and_conditions"
+    t.boolean "published", default: false
+    t.string "image"
     t.index ["commerce_id"], name: "index_offers_on_commerce_id"
   end
 
@@ -139,6 +168,11 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "advertisements", "commerces"
+  add_foreign_key "categories_commerces", "categories"
+  add_foreign_key "categories_commerces", "commerces"
+  add_foreign_key "categories_offers", "categories"
+  add_foreign_key "categories_offers", "offers"
   add_foreign_key "coupons", "offers"
   add_foreign_key "coupons", "users", column: "client_id"
   add_foreign_key "favorites", "products"
@@ -146,7 +180,7 @@ ActiveRecord::Schema.define(version: 2020_03_06_140337) do
   add_foreign_key "info_admin_brands", "commerces"
   add_foreign_key "info_admin_brands", "users", column: "admin_brand_id"
   add_foreign_key "info_clients", "users", column: "client_id"
-  add_foreign_key "notifications", "users", column: "client_id"
+  add_foreign_key "notifications", "commerces"
   add_foreign_key "offers", "commerces"
   add_foreign_key "product_categories", "products"
   add_foreign_key "product_categories", "users", column: "category_id"
