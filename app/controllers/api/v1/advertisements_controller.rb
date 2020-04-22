@@ -19,7 +19,6 @@ class Api::V1::AdvertisementsController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        binding.pry
         advertisement = Advertisement.new(advertisement_params)
         if advertisement.save
           render json: { message: 'El anuncio ha sido creado con éxito'},status: 201
