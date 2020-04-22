@@ -1,10 +1,11 @@
 class Notification < ApplicationRecord
-  belongs_to :client
+  belongs_to :commerce
   def self.get_params(exclude = [])
     params = [
       :id,
-      :client_id,
-      :text
+      :commerce_id,
+      :text,
+      :title
     ]
   end
 end

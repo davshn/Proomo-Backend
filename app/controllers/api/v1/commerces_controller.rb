@@ -14,6 +14,7 @@ class Api::V1::CommercesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         commerce = Commerce.new(commerce_params)
+        commerce.category_ids = params[:data][:category_ids]
         if commerce.save
           render json: { message: 'El comercio ha sido creado con éxito'}, status: 201
         else
