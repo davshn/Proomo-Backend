@@ -55,6 +55,11 @@ gem 'jsonapi-rails'
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 gem 'rack-cors'
 
+# Authentication, authorization and roles
+gem 'jwt'
+gem 'devise'
+gem 'cancancan', '~> 2.0'
+gem 'rolify'
 
 
 group :development, :test do

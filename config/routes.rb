@@ -11,6 +11,10 @@ Rails.application.routes.draw do
       resources :products
       resources :offers
       resources :purchaces
+      resources :users
+      post  '/find_client' => 'users#find_client'
+      post  '/find_user' => 'users#find_user'
+      post  '/create_user' => 'users#create_user'
     end
   end
   devise_for :users
