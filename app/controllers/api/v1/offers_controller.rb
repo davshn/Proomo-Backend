@@ -21,7 +21,6 @@ class Api::V1::OffersController < ApplicationController
       ActiveRecord::Base.transaction do
         offer = Offer.new(offer_params)
         offer.category_ids = params[:data][:category_ids]
-        binding.pry
         if offer.save
           render json: { message: 'La oferta ha sido creado con éxito'},status: 201
         else
