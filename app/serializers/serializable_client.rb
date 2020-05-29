@@ -9,7 +9,8 @@ class SerializableClient < JSONAPI::Serializable::Resource
              :user_name,
              :phone,
              :birthday,
-             :genre
+             :genre,
+             :commerce_ref
 
   # has_many :pits
   #

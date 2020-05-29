@@ -21,6 +21,7 @@ class Api::V1::OffersController < ApplicationController
       ActiveRecord::Base.transaction do
         offer = Offer.new(offer_params)
         offer.category_ids = params[:data][:category_ids]
+        binding.pry
         if offer.save
           render json: { message: 'La oferta ha sido creado con éxito'},status: 201
         else
@@ -35,6 +36,28 @@ class Api::V1::OffersController < ApplicationController
   def update
     begin
       ActiveRecord::Base.transaction do
+        offer = Offer.find(params[:id])
+        offer.update(offer_params)
+        offer.update(category_ids: params[:data][:category_ids])
+        render_json(
+            jsonapi: offer,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
+  def show
+    begin
+      ActiveRecord::Base.transaction do
+        offer = Offer.find(params[:id])
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: offer,
+            status: 200
+        )
       end
     rescue
       raise

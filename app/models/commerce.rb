@@ -2,6 +2,7 @@ class Commerce < ApplicationRecord
   has_many :products
   has_many :offers
   has_many :notifications
+  has_many :advertisements
   has_and_belongs_to_many :categories
 
   def self.get_params(exclude = [])
@@ -10,7 +11,8 @@ class Commerce < ApplicationRecord
       :name,
       :image,
       :description,
-      :category_ids
+      :category_ids,
+      :published
     ]
   end
   mount_base64_uploader :image, ImageUploader

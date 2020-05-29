@@ -12,6 +12,7 @@ class Offer < ApplicationRecord
       :image,
       :terms_and_conditions,
       :category_ids,
+      :published
     ]
   end
   mount_base64_uploader :image, ImageUploader
