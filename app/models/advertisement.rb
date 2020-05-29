@@ -1,4 +1,7 @@
 class Advertisement < ApplicationRecord
+  belongs_to :category
+  belongs_to :commerce
+
   def self.get_params(exclude = [])
     params = [
       :id,

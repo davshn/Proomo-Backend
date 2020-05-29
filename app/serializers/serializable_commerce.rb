@@ -1,0 +1,13 @@
+class SerializableCommerce < JSONAPI::Serializable::Resource
+  type 'commerces'
+
+  attributes :name,
+              :image,
+              :description,
+              :category_ids,
+              :published
+
+  attribute :admin_user do
+    User.find_by(commerce_ref: @object.id)
+  end
+end
