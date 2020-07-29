@@ -49,6 +49,31 @@ class Api::V1::CategoriesController < ApplicationController
     end
   end
 
+  def show
+    begin
+      ActiveRecord::Base.transaction do
+        category = Category.find(params[:id])
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: category,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
+  def find_product_categories
+    product_categories = Category.where(principal_category_id: nil, concept_name: "Producto")
+    render json: {data: product_categories}, status: 200
+  end
+
+  def find_service_categories
+    service_categories = Category.where(principal_category_id: nil, concept_name: "Servicio")
+    render json: {data: service_categories}, status: 200
+  end
+
   private
 
   def category_params

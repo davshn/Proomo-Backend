@@ -10,4 +10,10 @@ class SerializableCommerce < JSONAPI::Serializable::Resource
   attribute :admin_user do
     User.find_by(commerce_ref: @object.id)
   end
+  attribute :offers do
+    @object.offers
+  end
+  attribute :categories do
+    @object.categories
+  end
 end
