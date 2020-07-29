@@ -37,6 +37,19 @@ class Api::V1::UsersController < ApplicationController
     end
   end
 
+  def update_user
+    @user = User.find(params[:id])
+    @user.update(user_params)
+    if @user.save
+      render_json(
+          jsonapi: @user,
+          status: 200
+      )
+    else
+      render json: { errors: @user.errors }, status: 422
+    end
+  end
+
   private
 
   def user_params

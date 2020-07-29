@@ -15,6 +15,9 @@ Rails.application.routes.draw do
       post  '/find_client' => 'users#find_client'
       post  '/find_user' => 'users#find_user'
       post  '/create_user' => 'users#create_user'
+      put  '/:id/update_user' => 'users#update_user'
+      get  '/find_product_categories' => 'categories#find_product_categories'
+      get  '/find_service_categories' => 'categories#find_service_categories'
     end
   end
   devise_for :users
