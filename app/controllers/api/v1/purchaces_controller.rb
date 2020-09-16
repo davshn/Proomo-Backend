@@ -1,5 +1,6 @@
 class Api::V1::PurchacesController < ApplicationController
   skip_before_action :verify_authenticity_token
+  include ColletModule
 
   def index
     all_purchaces = Purchace.all
@@ -19,9 +20,20 @@ class Api::V1::PurchacesController < ApplicationController
   def create
     begin
       ActiveRecord::Base.transaction do
-        purchace = Purchace.new(purchace_params)
+        #purchace = Purchace.new(purchace_params)
+        purchace = Purchace.new(state: params['state'],client_id: params['client_id'])
         if purchace.save
-          render json: { message: 'La Compra ha sido creado con éxito'},status: 201
+          user = User.find_by(id: purchace.client_id)
+          name = user.first_name.to_s + " " + user.second_name.to_s + " " + user.last_name.to_s + " " + user.last_second_name.to_s
+          reference_array = ['CC',user.id,purchace.id,name,user.email,user.phone]
+          transaction = ColletModule.create_transaction_payment(purchace.id,params['value'],reference_array)
+          purchace.total = params['value']
+          purchace.ticket_id = transaction[:data]['TicketId']
+          purchace.state = 'PENDING'
+          purchace.save
+          
+          url = transaction[:data]['eCollectUrl']
+          render json: { message: 'La Compra ha sido creado con éxito', url: url },status: 201
         else
           render json: { message: 'Ocurrió un error' }, status: 400
         end
@@ -49,6 +61,31 @@ class Api::V1::PurchacesController < ApplicationController
     end
   end
 
+  def collet_hook
+    begin
+      ActiveRecord::Base.transaction do
+        
+        purchase = Purchace.find_by(ticket_id: params["TicketId"])
+        unless purchase.nil?
+          information = ColletModule.get_transaction_information(purchase.ticket_id)
+          purchase.update(
+            trazability_code: information[:data]['TrazabilityCode'], 
+            return_code: information[:data]['ReturnCode'],
+            trans_value: information[:data]['TransValue'],
+            bank_process_date: information[:data]['BankProcessDate'],
+            fi_code: information[:data]['FICode'],
+            fi_name: information[:data]['FiName'],
+            payment_system: information[:data]['PaymentSystem'],
+            invoice: information[:data]['Invoice'],
+          )
+        end
+      end
+    rescue
+      raise
+    end
+  end
+
+
   private
 
   def purchace_params
@@ -57,4 +94,5 @@ class Api::V1::PurchacesController < ApplicationController
       purchace_items_attributes: PurchaseItem.get_params
     )
   end
+
 end
