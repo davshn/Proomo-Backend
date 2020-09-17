@@ -21,21 +21,33 @@ class Api::V1::PurchacesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         #purchace = Purchace.new(purchace_params)
+        Rails.logger.debug("create----->")
         purchace = Purchace.new(state: params['state'],client_id: params['client_id'])
+        Rails.logger.debug("state , client_id  -----> ", params['state'] , params['client_id'])
         if purchace.save
+          Rails.logger.debug(" IF  -----> ")
           user = User.find_by(id: purchace.client_id)
+          Rails.logger.debug(" user  -----> ", user)
           name = user.first_name.to_s + " " + user.second_name.to_s + " " + user.last_name.to_s + " " + user.last_second_name.to_s
+          Rails.logger.debug(" name  -----> ", name)
           reference_array = ['CC',user.id,purchace.id,name,user.email,user.phone]
+          Rails.logger.debug(" reference_array  -----> ", reference_array)
           transaction = ColletModule.create_transaction_payment(purchace.id,params['value'],reference_array)
+          Rails.logger.debug(" transaction  -----> ", transaction)
           purchace.total = params['value']
+          Rails.logger.debug(" purchace.total  -----> ", purchace.total)
           purchace.ticket_id = transaction[:data]['TicketId']
+          Rails.logger.debug(" purchace.ticket_id  -----> ", purchace.ticket_id)
           purchace.state = 'PENDING'
+          Rails.logger.debug(" purchace.state  -----> ", purchace.state)
           purchace.save
-          
+          Rails.logger.debug(" purchace.save  -----> ")
           url = transaction[:data]['eCollectUrl']
+          Rails.logger.debug(" url  -----> ", url)
           render json: { message: 'La Compra ha sido creado con éxito', url: url },status: 201
         else
           render json: { message: 'Ocurrió un error' }, status: 400
+          Rails.logger.debug(" ELSE  -----> ", url)
         end
       end
     rescue
