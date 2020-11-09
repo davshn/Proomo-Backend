@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       put  '/:id/update_user' => 'users#update_user'
       get  '/find_product_categories' => 'categories#find_product_categories'
       get  '/find_service_categories' => 'categories#find_service_categories'
+      get '/search' => 'offers#search'
     end
   end
   devise_for :users

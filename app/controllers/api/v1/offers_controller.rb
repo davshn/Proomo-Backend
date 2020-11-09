@@ -72,6 +72,35 @@ class Api::V1::OffersController < ApplicationController
     end
   end
 
+  def search
+    begin
+      query = params[:q]
+      page = params[:page] || 1
+      commerce = params[:commerce]
+      page = 1 if page.to_i <= 0
+
+      results = []
+      unless query.nil?
+        if commerce.nil?
+          results = Offer.search_published(query, page)
+        else
+          results = Offer.search_published_by_brand(query, commerce, page)
+        end
+        ids = results.map{|r|  r._source.id}
+      end
+      offers = Offer.where(id: ids)
+      render_json(
+        jsonapi: offers,
+        meta: {
+          results: results.size
+        },
+        status: 200
+      )
+    rescue
+      raise
+    end
+  end
+
   private
 
   def offer_params

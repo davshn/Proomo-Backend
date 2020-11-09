@@ -102,13 +102,12 @@ ActiveRecord::Schema.define(version: 2020_07_29_000940) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.bigint "client_id", null: false
+    t.bigint "commerce_id", null: false
     t.string "text", null: false
+    t.string "title", null: false
+    t.boolean "published", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "commerce_id"
-    t.boolean "published", default: false
-    t.index ["client_id"], name: "index_notifications_on_client_id"
     t.index ["commerce_id"], name: "index_notifications_on_commerce_id"
   end
 
@@ -215,7 +214,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_000940) do
   add_foreign_key "info_admin_brands", "commerces"
   add_foreign_key "info_admin_brands", "users", column: "admin_brand_id"
   add_foreign_key "info_clients", "users", column: "client_id"
-  add_foreign_key "notifications", "users", column: "client_id"
+  add_foreign_key "notifications", "commerces"
   add_foreign_key "offers", "commerces"
   add_foreign_key "product_categories", "products"
   add_foreign_key "product_categories", "users", column: "category_id"
