@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get  '/find_product_categories' => 'categories#find_product_categories'
       get  '/find_service_categories' => 'categories#find_service_categories'
       post '/collet_hook' => 'purchaces#collet_hook'
+      get '/search' => 'offers#search'
     end
   end
   devise_for :users
