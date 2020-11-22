@@ -3,7 +3,10 @@ class Api::V1::CommercesController < ApplicationController
 
   def index
     all_commerces = Commerce.all
-    render json: {data: all_commerces}, status: 200
+    render_json(
+      jsonapi: all_commerces,
+      status: 200
+    )
   end
 
   def new

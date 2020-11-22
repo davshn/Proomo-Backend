@@ -16,4 +16,11 @@ class SerializableCommerce < JSONAPI::Serializable::Resource
   attribute :categories do
     @object.categories
   end
+  attribute :score do
+    if !@object.score.nil?
+      @object.score
+    else
+      0
+    end
+  end
 end
