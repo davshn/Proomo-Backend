@@ -89,13 +89,11 @@ class Api::V1::OffersController < ApplicationController
         ids = results.map{|r|  r._source.id}
       end
       offers = Offer.where(id: ids)
-      render_json(
-        jsonapi: offers,
-        meta: {
-          results: results.size
-        },
-        status: 200
-      )
+      aggs_brands = results.response["aggregations"]["brands"]["buckets"] # se extraen las marcas que estan vendiendo ese producto
+      brands_id = aggs_brands.map{ |b|  b["key"] } # extraemos el id del comercio
+      brands = Commerce.where(id: brands_id).select(:id, :name).limit(10)
+      brands_mapped = brands.map{ |brand| { id: brand.id, name: brand.name, quantity: aggs_brands.find{|e| e["key"] == brand.id}["doc_count"]  } } # se junta el id, nombre de la marca y la cantidad de productos que hacen match
+      render json: { data: offers, hits: results.response.hits.total.value, sellers: brands_mapped }
     rescue
       raise
     end

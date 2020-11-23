@@ -80,6 +80,13 @@ class Offer < ApplicationRecord
             }
           ]
         }
+      },
+      aggs: {
+        brands: {
+          terms: {
+            field: "commerce_id"
+          }
+        }
       }
     })
   end
@@ -115,6 +122,13 @@ class Offer < ApplicationRecord
               }
             }
           ]
+        }
+      },
+      aggs: {
+        brands: {
+          terms: {
+            field: "commerce_id"
+          }
         }
       }
     })
