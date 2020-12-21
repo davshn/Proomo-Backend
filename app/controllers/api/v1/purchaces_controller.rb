@@ -32,9 +32,9 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(" name  -----> ")
           reference_array = ['CC',user.id,purchace.id,name,user.email,user.phone]
           Rails.logger.debug(" reference_array  -----> ")
-          transaction = ColletModule.create_transaction_payment(1,20000,reference_array)
+          transaction = ColletModule.create_transaction_payment(1,params[:value],reference_array)
           Rails.logger.debug(" transaction  -----> ")
-          purchace.total = params['value']
+          purchace.total = params[:value]
           Rails.logger.debug(" purchace.total  -----> ")
           purchace.ticket_id = transaction[:data]['TicketId']
           Rails.logger.debug(" purchace.ticket_id  -----> ")
