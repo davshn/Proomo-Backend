@@ -76,6 +76,23 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def find_coupons
+    begin
+      ActiveRecord::Base.transaction do
+        commerce = Commerce.find(params[:id])
+        coupons = commerce.offers.all
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: commerce,
+            meta: coupons,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
   private
 
   def commerce_params

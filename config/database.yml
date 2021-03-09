@@ -27,9 +27,9 @@ default: &default
 development:
   <<: *default
   database: Proomo_back_development
-  host: localhost
-  username: postgres
-  password: password
+  # host: localhost
+  # username: postgres
+  # password: password
 
   # The specified database role being used to connect to postgres.
   # To create additional roles in postgres see `$ createuser --help`.

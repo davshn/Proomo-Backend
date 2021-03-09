@@ -77,12 +77,12 @@ class Api::V1::PurchacesController < ApplicationController
   def collet_hook
     begin
       ActiveRecord::Base.transaction do
-        
+
         purchase = Purchace.find_by(ticket_id: params["TicketId"])
         unless purchase.nil?
           information = ColletModule.get_transaction_information(purchase.ticket_id)
           purchase.update(
-            trazability_code: information[:data]['TrazabilityCode'], 
+            trazability_code: information[:data]['TrazabilityCode'],
             return_code: information[:data]['ReturnCode'],
             trans_value: information[:data]['TransValue'],
             bank_process_date: information[:data]['BankProcessDate'],
@@ -91,6 +91,19 @@ class Api::V1::PurchacesController < ApplicationController
             payment_system: information[:data]['PaymentSystem'],
             invoice: information[:data]['Invoice'],
           )
+        end
+      end
+    rescue
+      raise
+    end
+  end
+
+  def validate_sale
+    begin
+      ActiveRecord::Base.transaction do
+        purchase = Purchace.find_by(ticket_id: params["TicketId"])
+        unless purchase.nil?
+          purchase.update(state:"VALIDATE")
         end
       end
     rescue
