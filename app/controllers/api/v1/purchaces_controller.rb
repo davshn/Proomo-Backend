@@ -102,8 +102,11 @@ class Api::V1::PurchacesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         purchase = Purchace.find_by(ticket_id: params["TicketId"])
-        unless purchase.nil?
+        if !purchase.nil?
           purchase.update(state:"VALIDATE")
+          render json: { message: 'La Compra ha sido validada con éxito' },status: 201
+        else
+          render json: { message: 'No se pudo validar la compra' }, status: 400
         end
       end
     rescue
