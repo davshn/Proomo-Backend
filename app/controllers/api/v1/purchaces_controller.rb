@@ -118,7 +118,8 @@ class Api::V1::PurchacesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         purchaces = Purchace.where(client_id: params[:id])
-        render json: { data: purchaces }, status: 200
+        coupons = Offer.where(id: purchaces.map(&:offer_id).uniq)
+        render json: { data: purchaces, meta: coupons }, status: 200
       end
     rescue
       raise
