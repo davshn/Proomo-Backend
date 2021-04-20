@@ -130,7 +130,7 @@ class Api::V1::PurchacesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         purchace = Purchace.find_by(ticket_id: params["TicketId"].to_i)
-        if !purchase.nil?
+        if !purchace.nil?
           # resume = resume = {:create_at => purchase.created_at,
           #                    :ticket_id => purchase.ticket_id,
           #                    :total => purchase.total,
