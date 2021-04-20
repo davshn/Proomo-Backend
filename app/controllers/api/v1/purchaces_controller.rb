@@ -129,7 +129,7 @@ class Api::V1::PurchacesController < ApplicationController
   def find_purchace_by_ticket
     begin
       ActiveRecord::Base.transaction do
-        purchace = Purchace.find_by(ticket_id: params["TicketId"])
+        purchace = Purchace.find_by(ticket_id: params["TicketId"].to_i)
         if !purchase.nil?
           # resume = resume = {:create_at => purchase.created_at,
           #                    :ticket_id => purchase.ticket_id,
