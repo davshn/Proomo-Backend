@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       post '/validate_sale' => 'purchaces#validate_sale'
       get '/find_my_purchaces' => 'purchaces#find_my_purchaces'
       get '/find_coupons' => 'commerces#find_coupons'
+      get '/find_purchace_by_ticket' => 'purchaces#find_purchace_by_ticket'
     end
   end
   devise_for :users

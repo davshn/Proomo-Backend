@@ -126,6 +126,28 @@ class Api::V1::PurchacesController < ApplicationController
     end
   end
 
+  def find_purchace_by_ticket
+    begin
+      ActiveRecord::Base.transaction do
+        purchace = Purchace.find_by(ticket_id: params["TicketId"])
+        if !purchase.nil?
+          # resume = resume = {:create_at => purchase.created_at,
+          #                    :ticket_id => purchase.ticket_id,
+          #                    :total => purchase.total,
+          #                    :first_name => purchase.client.first_name,
+          #                    :last_name => purchase.client.last_name,
+          #                    :email => purchase.client.email}
+          client = purchace.client
+          render json: { data: purchace, meta: client },status: 201
+        else
+          render json: { message: 'No se pudo encontrar la compra' }, status: 400
+        end
+      end
+    rescue
+      raise
+    end
+  end
+
 
   private
 
