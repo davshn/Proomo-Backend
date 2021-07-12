@@ -105,7 +105,15 @@ class Api::V1::PurchacesController < ApplicationController
         if !purchase.nil?
           information = ColletModule.get_transaction_information(purchase.ticket_id)
           Rails.logger.debug(information)
-          purchase.update(
+          Rails.logger.debug(information[:data]['TrazabilityCode'])
+          Rails.logger.debug(information[:data]['ReturnCode'])
+          Rails.logger.debug(information[:data]['TransValue'])
+          Rails.logger.debug(information[:data]['BankProcessDate'])
+          Rails.logger.debug(information[:data]['FICode'])
+          Rails.logger.debug(information[:data]['FiName'])
+          Rails.logger.debug(information[:data]['PaymentSystem'])
+          Rails.logger.debug(information[:data]['Invoice'])
+          purchase.!update(
             trazability_code: information[:data]['TrazabilityCode'],
             return_code: information[:data]['ReturnCode'],
             trans_value: information[:data]['TransValue'],
