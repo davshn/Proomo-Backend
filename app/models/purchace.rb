@@ -6,7 +6,8 @@ class Purchace < ApplicationRecord
     params = [
       :state,
       :client_id,
-      :offer_id
+      :offer_id,
+      :commerce_id
     ]
   end
 end
