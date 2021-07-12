@@ -114,14 +114,15 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(information[:data]['PaymentSystem'])
           Rails.logger.debug(information[:data]['Invoice'])
           purchase.!update(
-            trazability_code: information[:data]['TrazabilityCode'],
-            return_code: information[:data]['ReturnCode'],
-            trans_value: information[:data]['TransValue'],
+            trazability_code: information[:data]['TrazabilityCode'].to_i,
+            return_code: information[:data]['ReturnCode'].to_s,
+            state: information[:data]['ReturnCode'].to_s,
+            trans_value: information[:data]['TransValue'].to_i,
             bank_process_date: information[:data]['BankProcessDate'],
-            fi_code: information[:data]['FICode'],
-            fi_name: information[:data]['FiName'],
-            payment_system: information[:data]['PaymentSystem'],
-            invoice: information[:data]['Invoice'],
+            fi_code: information[:data]['FICode'].to_i,
+            fi_name: information[:data]['FiName'].to_s,
+            payment_system: information[:data]['PaymentSystem'].to_i,
+            invoice: information[:data]['Invoice'].to_i,
           )
           purchase.update(validate_sale:true)
           render json: { message: 'La Compra ha sido validada con éxito' },status: 201
