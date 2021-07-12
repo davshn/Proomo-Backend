@@ -103,6 +103,17 @@ class Api::V1::PurchacesController < ApplicationController
       ActiveRecord::Base.transaction do
         purchase = Purchace.find_by(ticket_id: params["TicketId"])
         if !purchase.nil?
+          information = ColletModule.get_transaction_information(purchase.ticket_id)
+          purchase.update(
+            trazability_code: information[:data]['TrazabilityCode'],
+            return_code: information[:data]['ReturnCode'],
+            trans_value: information[:data]['TransValue'],
+            bank_process_date: information[:data]['BankProcessDate'],
+            fi_code: information[:data]['FICode'],
+            fi_name: information[:data]['FiName'],
+            payment_system: information[:data]['PaymentSystem'],
+            invoice: information[:data]['Invoice'],
+          )
           purchase.update(validate_sale:true)
           render json: { message: 'La Compra ha sido validada con éxito' },status: 201
         else
