@@ -105,24 +105,25 @@ class Api::V1::PurchacesController < ApplicationController
         if !purchase.nil?
           information = ColletModule.get_transaction_information(purchase.ticket_id)
           Rails.logger.debug(information)
-          purchase.update(trazability_code: information[:data]['TrazabilityCode'].to_i)
+          purchase.trazability_code = information[:data]['TrazabilityCode'].to_i
           Rails.logger.debug(information[:data]['TrazabilityCode'])
-          purchase.update(return_code: information[:data]['ReturnCode'].to_s)
-          purchase.update(state: information[:data]['ReturnCode'].to_s)
+          purchase.return_code = information[:data]['ReturnCode'].to_s
+          purchase.state = information[:data]['ReturnCode'].to_s
           Rails.logger.debug(information[:data]['ReturnCode'])
-          purchase.update(trans_value: information[:data]['TransValue'].to_i)
+          purchase.trans_value = information[:data]['TransValue'].to_i
           Rails.logger.debug(information[:data]['TransValue'])
-          purchase.update(bank_process_date: information[:data]['BankProcessDate'])
+          purchase.bank_process_date = information[:data]['BankProcessDate']
           Rails.logger.debug(information[:data]['BankProcessDate'])
-          purchase.update(fi_code: information[:data]['FICode'].to_i)
+          purchase.fi_code = information[:data]['FICode'].to_i
           Rails.logger.debug(information[:data]['FICode'])
-          purchase.update(fi_name: information[:data]['FiName'].to_s)
+          purchase.fi_name = information[:data]['FiName'].to_s
           Rails.logger.debug(information[:data]['FiName'])
-          purchase.update(payment_system: information[:data]['PaymentSystem'].to_i)
+          purchase.payment_system = information[:data]['PaymentSystem'].to_i
           Rails.logger.debug(information[:data]['PaymentSystem'])
-          purchase.update(invoice: information[:data]['Invoice'].to_i)
+          purchase.invoice = information[:data]['Invoice'].to_i
           Rails.logger.debug(information[:data]['Invoice'])
-          purchase.update(validate_sale:true)
+          purchase.validate_sale = true
+          purchase.save!
           render json: { message: 'La Compra ha sido validada con éxito' },status: 201
         else
           render json: { message: 'No se pudo validar la compra' }, status: 400
