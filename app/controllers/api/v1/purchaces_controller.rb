@@ -106,23 +106,16 @@ class Api::V1::PurchacesController < ApplicationController
           information = ColletModule.get_transaction_information(purchase.ticket_id)
           Rails.logger.debug(information)
           purchase.trazability_code = information[:data]['TrazabilityCode'].to_i
-          Rails.logger.debug(information[:data]['TrazabilityCode'])
           purchase.return_code = information[:data]['ReturnCode'].to_s
           purchase.state = information[:data]['ReturnCode'].to_s
-          Rails.logger.debug(information[:data]['ReturnCode'])
           purchase.trans_value = information[:data]['TransValue'].to_i
-          Rails.logger.debug(information[:data]['TransValue'])
           purchase.bank_process_date = information[:data]['BankProcessDate']
-          Rails.logger.debug(information[:data]['BankProcessDate'])
           purchase.fi_code = information[:data]['FICode'].to_i
-          Rails.logger.debug(information[:data]['FICode'])
           purchase.fi_name = information[:data]['FiName'].to_s
-          Rails.logger.debug(information[:data]['FiName'])
           purchase.payment_system = information[:data]['PaymentSystem'].to_i
-          Rails.logger.debug(information[:data]['PaymentSystem'])
           purchase.invoice = information[:data]['Invoice'].to_i
-          Rails.logger.debug(information[:data]['Invoice'])
           purchase.validate_sale = true
+          Rails.logger.debug(purchase)
           purchase.save!
           render json: { message: 'La Compra ha sido validada con éxito' },status: 201
         else
