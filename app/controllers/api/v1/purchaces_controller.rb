@@ -104,6 +104,7 @@ class Api::V1::PurchacesController < ApplicationController
         purchase = Purchace.find_by(ticket_id: params["TicketId"])
         if !purchase.nil?
           information = ColletModule.get_transaction_information(purchase.ticket_id)
+          Rails.logger.debug(information)
           purchase.update(
             trazability_code: information[:data]['TrazabilityCode'],
             return_code: information[:data]['ReturnCode'],
