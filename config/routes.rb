@@ -23,6 +23,7 @@ Rails.application.routes.draw do
       get '/find_my_purchaces' => 'purchaces#find_my_purchaces'
       get '/find_coupons' => 'commerces#find_coupons'
       get '/find_purchace_by_ticket' => 'purchaces#find_purchace_by_ticket'
+      get '/get_points' => 'users#get_points'
     end
   end
   devise_for :users
