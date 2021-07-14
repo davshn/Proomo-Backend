@@ -57,7 +57,7 @@ class Api::V1::UsersController < ApplicationController
     user.update(total_points: total_points, spent_points: spent_points)
     current_points = user.total_points - user.spent_points
     render_json(
-        jsonapi: current_points,
+        current_points: current_points,
         status: 200
     )
   end
