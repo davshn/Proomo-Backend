@@ -56,7 +56,7 @@ class Api::V1::UsersController < ApplicationController
     spent_points = user.purchaces.select{|x| x.offer_id != nil}.map{|x| Offer.find(x.offer_id).points}.inject(0){|sum,x| sum + x }
     user.update(total_points: total_points, spent_points: spent_points)
     current_points = user.total_points - user.spent_points
-    render json: { current_points: current_points }, status: 422
+    render json: { current_points: current_points }, status: 200
   end
 
   private
