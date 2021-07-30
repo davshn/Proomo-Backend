@@ -19,7 +19,8 @@ class User < ApplicationRecord
       :birthday,
       :genre,
       :password,
-      :password_confirmation
+      :password_confirmation,
+      :user_favorites
     ]
   end
 end
