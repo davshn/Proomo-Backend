@@ -59,6 +59,18 @@ class Api::V1::UsersController < ApplicationController
     render json: { current_points: current_points }, status: 200
   end
 
+  def save_favorites
+    user = User.find(params[:user_id])
+    favorites = user.favorite_offers
+    if favorites.include? params[:offer_id].to_s
+      favorites.delete(params[:offer_id].to_s)
+    else
+      favorites << params[:offer_id].to_s
+    end
+    user.update(favorite_offers: favorites.uniq)
+    render json: { user_favorites: user.favorite_offers }, status: 200
+  end
+
   private
 
   def user_params

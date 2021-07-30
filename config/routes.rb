@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get '/find_coupons' => 'commerces#find_coupons'
       get '/find_purchace_by_ticket' => 'purchaces#find_purchace_by_ticket'
       get '/get_points/:id' => 'users#get_points'
+      post '/save_favorites' => 'users#save_favorites'
     end
   end
   devise_for :users
