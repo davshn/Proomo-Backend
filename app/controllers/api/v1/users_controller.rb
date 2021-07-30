@@ -71,6 +71,15 @@ class Api::V1::UsersController < ApplicationController
     render json: { user_favorites: user.favorite_offers }, status: 200
   end
 
+  def user_favorites
+    user = User.find(params[:id])
+    offers = Offer.find(user.favorite_offers.map{|x| x.to_i})
+    render_json(
+        jsonapi: offers,
+        status: 200
+    )
+  end
+
   private
 
   def user_params
