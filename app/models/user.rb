@@ -20,7 +20,7 @@ class User < ApplicationRecord
       :genre,
       :password,
       :password_confirmation,
-      :user_favorites
+      :favorite_offers
     ]
   end
 end
