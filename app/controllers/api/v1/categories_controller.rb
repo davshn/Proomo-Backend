@@ -75,12 +75,14 @@ class Api::V1::CategoriesController < ApplicationController
   end
 
   def find_product_category_points
-    product_categories = Category.where(principal_category_id: nil, concept_name: "Producto")
+    filter_categories = Offer.where(by_points: true).map{|x| x.category_ids}.flatten
+    product_categories = Category.where(id: filter_categories).where(principal_category_id: nil, concept_name: "Producto")
     render json: {data: product_categories}, status: 200
   end
 
   def find_service_category_points
-    service_categories = Category.where(principal_category_id: nil, concept_name: "Servicio")
+    filter_categories = Offer.where(by_points: true).map{|x| x.category_ids}.flatten
+    service_categories = Category.where(id: filter_categories).where(principal_category_id: nil, concept_name: "Servicio")
     render json: {data: service_categories}, status: 200
   end
 
