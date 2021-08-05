@@ -18,6 +18,8 @@ Rails.application.routes.draw do
       put  '/:id/update_user' => 'users#update_user'
       get  '/find_product_categories' => 'categories#find_product_categories'
       get  '/find_service_categories' => 'categories#find_service_categories'
+      get  '/find_product_category_points' => 'categories#find_product_category_points'
+      get  '/find_service_category_points' => 'categories#find_service_category_points'
       post '/collet_hook' => 'purchaces#collet_hook'
       post '/validate_sale' => 'purchaces#validate_sale'
       get '/find_my_purchaces' => 'purchaces#find_my_purchaces'
