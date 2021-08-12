@@ -34,6 +34,15 @@ class Api::V1::CategoriesController < ApplicationController
   def update
     begin
       ActiveRecord::Base.transaction do
+        category = Category.find(params[:id])
+        if category.update(category_params)
+          render_json(
+              jsonapi: category,
+              status: 200
+          )
+        else
+          raise
+        end
       end
     rescue
       raise

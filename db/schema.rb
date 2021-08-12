@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_14_172031) do
+ActiveRecord::Schema.define(version: 2021_08_12_144617) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -123,6 +123,10 @@ ActiveRecord::Schema.define(version: 2021_07_14_172031) do
     t.string "image"
     t.integer "discount_value", default: 0
     t.integer "points", default: 0
+    t.boolean "by_points", default: false
+    t.integer "redeem_points", default: 0
+    t.boolean "is_online_product", default: false
+    t.integer "price", default: 0
     t.index ["commerce_id"], name: "index_offers_on_commerce_id"
   end
 
@@ -207,6 +211,7 @@ ActiveRecord::Schema.define(version: 2021_07_14_172031) do
     t.integer "commerce_ref"
     t.integer "total_points", default: 0
     t.integer "spent_points", default: 0
+    t.string "favorite_offers", default: [], array: true
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
