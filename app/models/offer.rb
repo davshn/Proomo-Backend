@@ -15,7 +15,9 @@ class Offer < ApplicationRecord
       :published,
       :discount_value,
       :is_online_product,
-      :price
+      :price,
+      :by_points,
+      :redeem_points
     ]
   end
   mount_base64_uploader :image, ImageUploader

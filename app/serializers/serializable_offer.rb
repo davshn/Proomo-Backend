@@ -10,7 +10,9 @@ class SerializableOffer < JSONAPI::Serializable::Resource
               :published,
               :discount_value,
               :is_online_product,
-              :price
+              :price,
+              :by_points,
+              :redeem_points
 
   attribute :commerce do
     Commerce.find(@object.commerce_id)
