@@ -8,7 +8,9 @@ class SerializableOffer < JSONAPI::Serializable::Resource
               :terms_and_conditions,
               :category_ids,
               :published,
-              :discount_value
+              :discount_value,
+              :is_online_product,
+              :price
 
   attribute :commerce do
     Commerce.find(@object.commerce_id)

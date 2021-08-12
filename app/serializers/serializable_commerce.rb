@@ -16,4 +16,8 @@ class SerializableCommerce < JSONAPI::Serializable::Resource
   attribute :categories do
     @object.categories
   end
+
+  attribute :is_online_commerce do
+    @object.offers.where(is_online_product: true).any? ? true : false
+  end
 end
