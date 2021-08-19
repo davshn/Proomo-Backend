@@ -1,4 +1,6 @@
 class Api::V1::PartnersController < ApplicationController
+  skip_before_action :verify_authenticity_token
+  
   def index
     all_partners = Partner.all
     render json: {data: all_partners}, status: 200
