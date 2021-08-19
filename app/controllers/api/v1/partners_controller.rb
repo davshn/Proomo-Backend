@@ -1,4 +1,4 @@
-class Api::V1::PartnerController < ApplicationController
+class Api::V1::PartnersController < ApplicationController
   def index
     all_partners = Partner.all
     render json: {data: all_partners}, status: 200
