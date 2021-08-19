@@ -1,9 +1,5 @@
 Rails.application.routes.draw do
 
-  get 'partner/index'
-  get 'partner/show'
-  get 'partner/create'
-  get 'partner/edit'
   namespace :api do
     namespace :v1 do
       resources :commerces
@@ -16,6 +12,7 @@ Rails.application.routes.draw do
       resources :offers
       resources :purchaces
       resources :users
+      resources :partners
       post  '/find_client' => 'users#find_client'
       post  '/find_user' => 'users#find_user'
       post  '/create_user' => 'users#create_user'
