@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_12_144617) do
+ActiveRecord::Schema.define(version: 2021_08_19_155410) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -63,6 +63,8 @@ ActiveRecord::Schema.define(version: 2021_08_12_144617) do
     t.string "description"
     t.float "score"
     t.boolean "published", default: false
+    t.bigint "partner_id"
+    t.index ["partner_id"], name: "index_commerces_on_partner_id"
   end
 
   create_table "coupons", force: :cascade do |t|
@@ -102,13 +104,12 @@ ActiveRecord::Schema.define(version: 2021_08_12_144617) do
   end
 
   create_table "notifications", force: :cascade do |t|
-    t.bigint "client_id", null: false
+    t.bigint "commerce_id", null: false
     t.string "text", null: false
+    t.string "title", null: false
+    t.boolean "published", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "commerce_id"
-    t.boolean "published", default: false
-    t.index ["client_id"], name: "index_notifications_on_client_id"
     t.index ["commerce_id"], name: "index_notifications_on_commerce_id"
   end
 
@@ -128,6 +129,14 @@ ActiveRecord::Schema.define(version: 2021_08_12_144617) do
     t.boolean "is_online_product", default: false
     t.integer "price", default: 0
     t.index ["commerce_id"], name: "index_offers_on_commerce_id"
+  end
+
+  create_table "partners", force: :cascade do |t|
+    t.string "name"
+    t.string "documment"
+    t.string "documment_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "product_categories", force: :cascade do |t|
@@ -236,7 +245,7 @@ ActiveRecord::Schema.define(version: 2021_08_12_144617) do
   add_foreign_key "info_admin_brands", "commerces"
   add_foreign_key "info_admin_brands", "users", column: "admin_brand_id"
   add_foreign_key "info_clients", "users", column: "client_id"
-  add_foreign_key "notifications", "users", column: "client_id"
+  add_foreign_key "notifications", "commerces"
   add_foreign_key "offers", "commerces"
   add_foreign_key "product_categories", "products"
   add_foreign_key "product_categories", "users", column: "category_id"

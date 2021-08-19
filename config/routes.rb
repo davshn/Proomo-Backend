@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  get 'partner/index'
+  get 'partner/show'
+  get 'partner/create'
+  get 'partner/edit'
   namespace :api do
     namespace :v1 do
       resources :commerces

@@ -4,6 +4,7 @@ class Commerce < ApplicationRecord
   has_many :notifications
   has_many :advertisements
   has_and_belongs_to_many :categories
+  belongs_to :partner
 
   def self.get_params(exclude = [])
     params = [
