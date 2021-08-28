@@ -98,7 +98,7 @@ class Api::V1::CommercesController < ApplicationController
       ActiveRecord::Base.transaction do
         commerces = Category.find(params[:id]).commerces
         if params[:city]
-          commerces = commercers.select{|x| x.city == params[:city]}
+          commerces = commerces.select{|x| x.city == params[:city]}
         end
         # render json: {data: commerce}, status: 200
         render_json(
