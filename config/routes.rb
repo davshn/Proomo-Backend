@@ -29,6 +29,7 @@ Rails.application.routes.draw do
       get '/get_points/:id' => 'users#get_points'
       post '/save_favorites' => 'users#save_favorites'
       get '/user_favorites/:id' => 'users#user_favorites'
+      get '/find_commerce_by_category/:id' => 'commerces#find_commerce_by_category'
     end
   end
   devise_for :users

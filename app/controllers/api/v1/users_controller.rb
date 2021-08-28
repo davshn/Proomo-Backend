@@ -73,7 +73,7 @@ class Api::V1::UsersController < ApplicationController
 
   def user_favorites
     user = User.find(params[:id])
-    offers = Offer.find(user.favorite_offers.map{|x| x.to_i})
+    offers = Offer.find(user.favorite_offers.map{|x| x.to_i}).select{|x| x.published == true}
     render_json(
         jsonapi: offers,
         status: 200

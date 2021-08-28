@@ -93,6 +93,22 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def find_commerce_by_category
+    begin
+      ActiveRecord::Base.transaction do
+        commerces = Category.find(params[:id]).commerces
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: commerces,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
+
   private
 
   def commerce_params
