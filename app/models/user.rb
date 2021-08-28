@@ -20,7 +20,11 @@ class User < ApplicationRecord
       :genre,
       :password,
       :password_confirmation,
-      :favorite_offers
+      :favorite_offers,
+      :city,
+      :latitude,
+      :longitude,
+      :notifications_id
     ]
   end
 end

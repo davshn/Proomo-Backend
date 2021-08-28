@@ -11,7 +11,11 @@ class SerializableClient < JSONAPI::Serializable::Resource
              :birthday,
              :genre,
              :commerce_ref,
-             :favorite_offers
+             :favorite_offers,
+             :city,
+             :latitude,
+             :longitude,
+             :notifications_id
 
   # has_many :pits
   #

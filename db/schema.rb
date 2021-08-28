@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_08_24_121108) do
+ActiveRecord::Schema.define(version: 2021_08_28_112405) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2021_08_24_121108) do
     t.float "score"
     t.boolean "published", default: false
     t.bigint "partner_id"
+    t.string "city"
     t.index ["partner_id"], name: "index_commerces_on_partner_id"
   end
 
@@ -223,6 +224,10 @@ ActiveRecord::Schema.define(version: 2021_08_24_121108) do
     t.integer "total_points", default: 0
     t.integer "spent_points", default: 0
     t.string "favorite_offers", default: [], array: true
+    t.string "city"
+    t.string "latitude"
+    t.string "longitude"
+    t.string "notifications_id"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
