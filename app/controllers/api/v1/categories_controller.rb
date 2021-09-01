@@ -2,8 +2,13 @@ class Api::V1::CategoriesController < ApplicationController
   skip_before_action :verify_authenticity_token
 
   def index
-    all_categories = Category.all
+    all_categories = Category.where(principal_category_id: nil).sort_by {|x| x.name}
     render json: {data: all_categories}, status: 200
+  end
+
+  def index_subcategories
+    all_subcategories = Category.where.not(principal_category_id: nil).sort_by {|x| x.name}
+    render json: {data: all_subcategories}, status: 200
   end
 
   def new
