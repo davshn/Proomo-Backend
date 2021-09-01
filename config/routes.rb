@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       get '/user_favorites/:id' => 'users#user_favorites'
       get '/find_commerce_by_category/:id' => 'commerces#find_commerce_by_category'
       get  '/index_subcategories' => 'categories#index_subcategories'
-      put  '/destroy_category/:id' => 'categories#destroy'
+      put  '/destroy_category/:id' => 'categories#destroy_category'
     end
   end
   devise_for :users
