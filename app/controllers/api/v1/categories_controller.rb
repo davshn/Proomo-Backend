@@ -78,6 +78,20 @@ class Api::V1::CategoriesController < ApplicationController
     end
   end
 
+  def destroy_category
+    begin
+      ActiveRecord::Base.transaction do
+        category = Category.find(params[:id])
+        Commerce.all.select{|x| x.category_ids.include? category.id}.map{|x| x.update(category_ids: (x.category_ids -= [category.id]))}
+        Offer.all.select{|x| x.category_ids.include? category.id}.map{|x| x.update(category_ids: (x.category_ids -= [category.id]))}
+        category.destroy!
+        render json: { message: 'Categoria borrada'}, status: 200
+      end
+    rescue
+      raise
+    end
+  end
+
   def find_product_categories
     product_categories = Category.where(principal_category_id: nil, concept_name: "Producto")
     render json: {data: product_categories}, status: 200
