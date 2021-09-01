@@ -13,6 +13,7 @@ class Commerce < ApplicationRecord
       :image,
       :description,
       :category_ids,
+      :city,
       :published
     ]
   end

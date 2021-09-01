@@ -5,6 +5,7 @@ class SerializableCommerce < JSONAPI::Serializable::Resource
               :image,
               :description,
               :category_ids,
+              :city,
               :published
 
   attribute :admin_user do
