@@ -67,8 +67,10 @@ class Api::V1::CommercesController < ApplicationController
       ActiveRecord::Base.transaction do
         commerce = Commerce.find(params[:id])
         # render json: {data: commerce}, status: 200
+        category_cupons = commerce.offers.map{|x| [x.id, x.categories.map{|y| [y.name, y.id]}]}
         render_json(
             jsonapi: commerce,
+            meta: category_cupons,
             status: 200
         )
       end
