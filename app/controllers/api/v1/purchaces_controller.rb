@@ -91,6 +91,21 @@ class Api::V1::PurchacesController < ApplicationController
             payment_system: information[:data]['PaymentSystem'],
             invoice: information[:data]['Invoice'],
           )
+          coupon = Offer.find(purchase.offer_id)
+          if coupon
+            user = purchase.client
+            commerce = Commerce.find(purchase.commerce_id)
+            if commerce.contact_email
+              commerce_email = commerce.contact_email
+            else
+              commerce_email = 'tweniadmon@gmail.com'
+            end
+            if coupon.is_online_product
+              PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+            else
+              PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+            end
+          end
         end
       end
     rescue
@@ -116,8 +131,26 @@ class Api::V1::PurchacesController < ApplicationController
           purchase.invoice = information[:data]['Invoice'].to_i
           purchase.validate_sale = true
           Rails.logger.debug(purchase)
-          purchase.save!
-          render json: { message: 'La Compra ha sido validada con éxito' },status: 201
+          if purchase.save!
+            coupon = Offer.find(purchase.offer_id)
+            if coupon
+              user = purchase.client
+              commerce = Commerce.find(purchase.commerce_id)
+              if commerce.contact_email
+                commerce_email = commerce.contact_email
+              else
+                commerce_email = 'tweniadmon@gmail.com'
+              end
+              if coupon.is_online_product
+                PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+              else
+                PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+              end
+            end
+            render json: { message: 'La Compra ha sido validada con éxito' },status: 201
+          else
+            render json: { message: 'No se pudo validar la compra' }, status: 400
+          end
         else
           render json: { message: 'No se pudo validar la compra' }, status: 400
         end
