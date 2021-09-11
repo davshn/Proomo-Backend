@@ -15,6 +15,7 @@ class Commerce < ApplicationRecord
       :category_ids,
       :city,
       :published,
+      :contact_email,
       :partner_id
     ]
   end

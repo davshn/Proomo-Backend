@@ -6,7 +6,9 @@ class SerializableCommerce < JSONAPI::Serializable::Resource
               :description,
               :category_ids,
               :city,
-              :published
+              :contact_email,
+              :published,
+              :partner_id
 
   attribute :admin_user do
     User.find_by(commerce_ref: @object.id)
