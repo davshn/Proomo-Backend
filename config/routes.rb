@@ -32,6 +32,7 @@ Rails.application.routes.draw do
       get '/find_commerce_by_category/:id' => 'commerces#find_commerce_by_category'
       get  '/index_subcategories' => 'categories#index_subcategories'
       put  '/destroy_category/:id' => 'categories#destroy_category'
+      get '/generate_reports/:date_selectd' => 'commerces#generate_reports'
     end
   end
   devise_for :users
