@@ -125,7 +125,7 @@ class Api::V1::CommercesController < ApplicationController
       commerces.each do |commerce|
         reports << Purchace.where(commerce_id: commerce.id, updated_at: date_active).map{|x| [commerce.name, commerce.city, commerce.partner.documment, commerce.partner.name, (x.client.first_name + ' ' + x.client.last_name), x.client.email, x.client.phone, x.ticket_id, x.state, x.total]}
       end
-      @reports = reports.flatten
+      @reports = reports.reject(&:empty?)
       render_json(
         json:{
           data:{
