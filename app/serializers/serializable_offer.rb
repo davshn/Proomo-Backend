@@ -12,7 +12,9 @@ class SerializableOffer < JSONAPI::Serializable::Resource
               :is_online_product,
               :price,
               :by_points,
-              :redeem_points
+              :redeem_points,
+              :schedule,
+              :valid_date
 
   attribute :commerce do
     Commerce.find(@object.commerce_id)
