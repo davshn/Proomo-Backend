@@ -99,7 +99,8 @@ class Api::V1::CommercesController < ApplicationController
   def find_commerce_by_category
     begin
       ActiveRecord::Base.transaction do
-        commerces = Category.find(params[:id]).commerces
+        # commerces = Category.find(params[:id]).commerces
+        commerces = Category.find(params[:id]).offers.map{|x| x.commerce}.uniq
         if params[:city]
           commerces = commerces.select{|x| x.city == params[:city]}
         end
