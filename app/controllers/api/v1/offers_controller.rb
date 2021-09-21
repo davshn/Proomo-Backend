@@ -6,6 +6,11 @@ class Api::V1::OffersController < ApplicationController
     render json: { data: all_offers }, status: 200
   end
 
+  def find_coupons_by_commerce
+    all_offers = Offer.where(commerce_id: params[:commerce_id])
+    render json: { data: all_offers }, status: 200
+  end
+
   def new
     begin
       ActiveRecord::Base.transaction do
