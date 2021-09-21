@@ -105,6 +105,10 @@ class Api::V1::PurchacesController < ApplicationController
             else
               PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
             end
+            render_json(
+                jsonapi: purchase,
+                status: 200
+            )
           end
         end
       end
