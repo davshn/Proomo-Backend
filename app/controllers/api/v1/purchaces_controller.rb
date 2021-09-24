@@ -93,6 +93,7 @@ class Api::V1::PurchacesController < ApplicationController
             fi_name: information[:data]['FiName'],
             payment_system: information[:data]['PaymentSystem'],
             invoice: information[:data]['Invoice'],
+            state: information[:data]['ReturnCode']
           )
           Rails.logger.debug("Purchase!!!!!")
           Rails.logger.debug(purchase.commerce_id)
