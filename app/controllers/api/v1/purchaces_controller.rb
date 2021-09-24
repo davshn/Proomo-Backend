@@ -18,7 +18,7 @@ class Api::V1::PurchacesController < ApplicationController
   end
 
 
- def create
+  def create
     begin
       ActiveRecord::Base.transaction do
         Rails.logger.debug("create----->")
@@ -77,10 +77,13 @@ class Api::V1::PurchacesController < ApplicationController
   def collet_hook
     begin
       ActiveRecord::Base.transaction do
-
+        Rails.logger.debug("Collect Hook!!!!!")
         purchase = Purchace.find_by(ticket_id: params["TicketId"])
         unless purchase.nil?
+          Rails.logger.debug("Purchase Nil!!!!!")
           information = ColletModule.get_transaction_information(purchase.ticket_id)
+          Rails.logger.debug("Information!!!!!")
+          Rails.logger.debug(information)
           purchase.update(
             trazability_code: information[:data]['TrazabilityCode'],
             return_code: information[:data]['ReturnCode'],
@@ -91,6 +94,9 @@ class Api::V1::PurchacesController < ApplicationController
             payment_system: information[:data]['PaymentSystem'],
             invoice: information[:data]['Invoice'],
           )
+          Rails.logger.debug("Purchase!!!!!")
+          Rails.logger.debug(purchase)
+          purchase.save!
           coupon = Offer.find(purchase.offer_id)
           if coupon
             user = purchase.client
@@ -100,11 +106,11 @@ class Api::V1::PurchacesController < ApplicationController
             else
               commerce_email = 'tweniadmon@gmail.com'
             end
-            # if coupon.is_online_product
-            #   PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
-            # else
-            #   PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
-            # end
+            if coupon.is_online_product
+              PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+            else
+              PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+            end
             render_json(
                 jsonapi: purchase,
                 status: 200
@@ -137,20 +143,20 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(purchase)
           if purchase.save!
             coupon = Offer.find(purchase.offer_id)
-            if coupon
-              user = purchase.client
-              commerce = Commerce.find(purchase.commerce_id)
-              if commerce.contact_email
-                commerce_email = commerce.contact_email
-              else
-                commerce_email = 'tweniadmon@gmail.com'
-              end
-              if coupon.is_online_product
-                PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
-              else
-                PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
-              end
-            end
+            # if coupon
+            #   user = purchase.client
+            #   commerce = Commerce.find(purchase.commerce_id)
+            #   if commerce.contact_email
+            #     commerce_email = commerce.contact_email
+            #   else
+            #     commerce_email = 'tweniadmon@gmail.com'
+            #   end
+            #   if coupon.is_online_product
+            #     PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+            #   else
+            #     PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+            #   end
+            # end
             render json: { message: 'La Compra ha sido validada con éxito' },status: 201
           else
             render json: { message: 'No se pudo validar la compra' }, status: 400
