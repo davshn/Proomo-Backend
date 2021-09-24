@@ -95,8 +95,9 @@ class Api::V1::PurchacesController < ApplicationController
             invoice: information[:data]['Invoice'],
           )
           Rails.logger.debug("Purchase!!!!!")
-          Rails.logger.debug(purchase)
+          Rails.logger.debug(purchase.commerce_id)
           purchase.save!
+          Rails.logger.debug("Purchase Saved!!!!!")
           coupon = Offer.find(purchase.offer_id)
           if coupon
             user = purchase.client
