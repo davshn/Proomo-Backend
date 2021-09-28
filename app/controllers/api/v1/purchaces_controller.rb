@@ -141,7 +141,7 @@ class Api::V1::PurchacesController < ApplicationController
           purchase.fi_name = information[:data]['FiName'].to_s
           purchase.payment_system = information[:data]['PaymentSystem'].to_i
           purchase.invoice = information[:data]['Invoice'].to_i
-          if purchase.state == "SUCCESS" && pruchase.return_code == "OK"
+          if purchase.state == "SUCCESS" && purchase.return_code == "OK"
             purchase.validate_sale = true
           else
             purchase.validate_sale = false
