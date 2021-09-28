@@ -141,30 +141,20 @@ class Api::V1::PurchacesController < ApplicationController
           purchase.fi_name = information[:data]['FiName'].to_s
           purchase.payment_system = information[:data]['PaymentSystem'].to_i
           purchase.invoice = information[:data]['Invoice'].to_i
-          purchase.validate_sale = true
+          if purchase.state == "SUCCESS"
+            purchase.validate_sale = true
+          else
+            purchase.validate_sale = false
+          end
           Rails.logger.debug(purchase)
-          if purchase.save!
-            coupon = Offer.find(purchase.offer_id)
-            # if coupon
-            #   user = purchase.client
-            #   commerce = Commerce.find(purchase.commerce_id)
-            #   if commerce.contact_email
-            #     commerce_email = commerce.contact_email
-            #   else
-            #     commerce_email = 'tweniadmon@gmail.com'
-            #   end
-            #   if coupon.is_online_product
-            #     PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
-            #   else
-            #     PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
-            #   end
-            # end
+          purchase.save!
+          if purchase.validate_sale
             render json: { message: 'La Compra ha sido validada con éxito' },status: 201
           else
-            render json: { message: 'No se pudo validar la compra' }, status: 400
+            render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
           end
         else
-          render json: { message: 'No se pudo validar la compra' }, status: 400
+          render json: { message: 'No se encuentra una compra con ese numero' }, status: 400
         end
       end
     rescue
