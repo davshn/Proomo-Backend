@@ -150,7 +150,7 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(purchase)
           purchase.save!
           if purchase.validate_sale
-            render json: { message: 'La Compra ha sido validada con éxito' },status: 201
+            render json: { message: 'La compra ha sido validada con éxito' },status: 201
           else
             render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
           end
