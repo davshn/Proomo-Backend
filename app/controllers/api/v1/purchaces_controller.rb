@@ -133,7 +133,7 @@ class Api::V1::PurchacesController < ApplicationController
           information = ColletModule.get_transaction_information(purchase.ticket_id)
           Rails.logger.debug(information)
           purchase.trazability_code = information[:data]['TrazabilityCode'].to_i
-          purchase.return_code = information[:data]['ReturnCode'].to_s
+          purchase.return_code = information[:data]['TranState'].to_s
           purchase.state = information[:data]['ReturnCode'].to_s
           purchase.trans_value = information[:data]['TransValue'].to_i
           purchase.bank_process_date = information[:data]['BankProcessDate']
@@ -141,10 +141,11 @@ class Api::V1::PurchacesController < ApplicationController
           purchase.fi_name = information[:data]['FiName'].to_s
           purchase.payment_system = information[:data]['PaymentSystem'].to_i
           purchase.invoice = information[:data]['Invoice'].to_i
-          if purchase.state == "SUCCESS"
+          if purchase.state == "SUCCESS" && pruchase.return_code == "OK"
             purchase.validate_sale = true
           else
             purchase.validate_sale = false
+            purchase.state = information[:data]['TranState'].to_s
           end
           Rails.logger.debug(purchase)
           purchase.save!
