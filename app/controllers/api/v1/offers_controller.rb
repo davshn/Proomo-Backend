@@ -77,6 +77,11 @@ class Api::V1::OffersController < ApplicationController
     end
   end
 
+  def get_index
+    offers = Offer.where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description) ]}
+    render json: { index: offers},status: 200    
+  end
+
   private
 
   def offer_params
