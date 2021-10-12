@@ -79,7 +79,12 @@ class Api::V1::OffersController < ApplicationController
 
   def get_index
     offers = Offer.where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description), x.title, x.description ]}
-    render json: { index: offers},status: 200
+    if params[:city]
+      commerces = Commerce.where(published: true, city: params[:city]).map{|x| [x.id, 'commerce', (x.title+' '+x.description), x.title, x.description ]}
+    elsif
+      commerces = Commerce.where(published: true).map{|x| [x.id, 'commerce', (x.title+' '+x.description), x.title, x.description ]}
+    end
+    render json: { index: (offers << commerce).flatten! },status: 200
   end
 
   private
