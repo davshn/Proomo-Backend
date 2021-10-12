@@ -84,7 +84,7 @@ class Api::V1::OffersController < ApplicationController
     elsif
       commerces = Commerce.where(published: true).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description ]}
     end
-    render json: { index: (offers << commerces).flatten! },status: 200
+    render json: { index: offers + commerces },status: 200
   end
 
   private
