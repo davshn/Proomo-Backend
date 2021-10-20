@@ -80,6 +80,24 @@ class Api::V1::UsersController < ApplicationController
     )
   end
 
+  def get_current_city
+    begin
+      ActiveRecord::Base.transaction do
+        lat = params[:latitude]
+        lon = params[:longitude]
+        lat_lon = "#{lat},#{lon}"
+        response = Geocoder.search(lat_lon).first
+        if response.present?
+          render json: { message: 'Ciudad encontrada', city: response.city },status: 201
+        else
+          render json: { message: "No se pudo encontrar la ciudad" }, status: 400
+        end
+      end
+    rescue
+      raise
+    end
+  end
+
   private
 
   def user_params

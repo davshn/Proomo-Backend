@@ -35,6 +35,7 @@ Rails.application.routes.draw do
       get '/generate_reports' => 'commerces#generate_reports'
       get '/find_coupons_by_commerce' => 'offers#find_coupons_by_commerce'
       get '/get_index' => 'offers#get_index'
+      get '/get_current_city' => 'users#get_current_city'
     end
   end
   devise_for :users
