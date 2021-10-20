@@ -60,6 +60,7 @@ gem 'jwt'
 gem 'devise'
 gem 'cancancan', '~> 2.0'
 gem 'rolify'
+gem 'geocoder'
 
 
 group :development, :test do
