@@ -78,11 +78,11 @@ class Api::V1::OffersController < ApplicationController
   end
 
   def get_index
-    offers = Offer.where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description), x.title, x.description ]}
+    offers = Offer.where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description), x.title, x.description, x.is_online_product, x.valid_date ]}
     if params[:city]
-      commerces = Commerce.where(published: true, city: params[:city]).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description ]}
+      commerces = Commerce.where(published: true, city: params[:city]).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description, nil, nil ]}
     elsif
-      commerces = Commerce.where(published: true).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description ]}
+      commerces = Commerce.where(published: true).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description, nil, nil  ]}
     end
     render json: { index: offers + commerces },status: 200
   end
