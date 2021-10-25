@@ -78,7 +78,7 @@ class Api::V1::OffersController < ApplicationController
   end
 
   def get_index
-    offers = Offer.where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description), x.title, x.description, x.is_online_product, x.valid_date ]}
+    offers = Offer.includes(:commerce).where(published: true).map{|x| [x.id, 'offer', (x.title+' '+x.description), x.title, x.description, x.commerce.name , x.is_online_product, x.valid_date ]}
     if params[:city]
       commerces = Commerce.where(published: true, city: params[:city]).map{|x| [x.id, 'commerce', (x.name+' '+x.description), x.name, x.description, nil, nil ]}
     elsif
