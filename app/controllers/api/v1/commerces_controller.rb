@@ -118,6 +118,8 @@ class Api::V1::CommercesController < ApplicationController
   def search_by_date
     begin
       ActiveRecord::Base.transaction do
+        Rails.logger.debug("params----->")
+        Rails.logger.debug(params)
         offers = Category.find(params[:id]).offers
         filter_offers = offers.select{|x| x.valid_date.to_datetime != nil && x.valid_date.to_datetime.between?(params[:start].to_datetime,params[:end].to_datetime)}
         commerces = filter_offers.any? ? filter_offers.map{|x| x.commerce}.uniq : []
