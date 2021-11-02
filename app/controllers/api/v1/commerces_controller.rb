@@ -115,6 +115,26 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def search_by_date
+    begin
+      ActiveRecord::Base.transaction do
+        offers = Category.find(params[:id]).offers
+        filter_offers = offers.select{|x| x.valid_date.to_datetime != nil && x.valid_date.to_datetime.between?(params[:data][:start].to_datetime,params[:data][:end].to_datetime)}
+        commerces = filter_offers.any? ? filter_offers.map{|x| x.commerce}.uniq : []
+        if params[:city] && commerces.size > 0
+          commerces = commerces.select{|x| x.city == params[:city]}
+        end
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: commerces,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
   def generate_reports
     begin
       start_date = Date.parse(params[:date_selected] + "-01")
