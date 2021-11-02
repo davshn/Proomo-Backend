@@ -119,7 +119,7 @@ class Api::V1::CommercesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         offers = Category.find(params[:id]).offers
-        filter_offers = offers.select{|x| x.valid_date.to_datetime != nil && x.valid_date.to_datetime.between?(params[:data][:start].to_datetime,params[:data][:end].to_datetime)}
+        filter_offers = offers.select{|x| x.valid_date.to_datetime != nil && x.valid_date.to_datetime.between?(params[:start].to_datetime,params[:end].to_datetime)}
         commerces = filter_offers.any? ? filter_offers.map{|x| x.commerce}.uniq : []
         if params[:city] && commerces.size > 0
           commerces = commerces.select{|x| x.city == params[:city]}
