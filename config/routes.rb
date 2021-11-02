@@ -36,7 +36,7 @@ Rails.application.routes.draw do
       get '/find_coupons_by_commerce' => 'offers#find_coupons_by_commerce'
       get '/get_index' => 'offers#get_index'
       get '/get_current_city' => 'users#get_current_city'
-      get '/search_by_date' => 'commerces#search_by_date'
+      get '/search_by_date/:id' => 'commerces#search_by_date'
     end
   end
   devise_for :users
