@@ -17,7 +17,9 @@ class Commerce < ApplicationRecord
       :published,
       :contact_email,
       :partner_id,
-      :nit
+      :nit,
+      :start,
+      :end
     ]
   end
   mount_base64_uploader :image, ImageUploader
