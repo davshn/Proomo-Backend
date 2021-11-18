@@ -166,7 +166,7 @@ class Api::V1::PurchacesController < ApplicationController
   def find_my_purchaces
     begin
       ActiveRecord::Base.transaction do
-        purchaces = Purchace.where(client_id: params[:id])
+        purchaces = Purchace.where(client_id: params[:id]).reverse
         coupons = Offer.where(id: purchaces.map(&:offer_id).uniq)
         render json: { data: purchaces, meta: coupons }, status: 200
       end
