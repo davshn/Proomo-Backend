@@ -8,7 +8,7 @@ class PaymentMailer < ApplicationMailer
     @email = email
     @name = name
     @commerce_email = commerce_email
-    mail(to: ['tweniadmon@gmail.com', @commerce_email],
+    mail(to: ['tweniadmon@gmail.com', @commerce_email, @email],
          subject: 'Confirmación de compra online')
   end
 
@@ -19,7 +19,7 @@ class PaymentMailer < ApplicationMailer
     @name = name
     @commerce_email = commerce_email
     @value = value
-    mail(to: ['tweniadmon@gmail.com', @commerce_email],
+    mail(to: ['tweniadmon@gmail.com', @commerce_email, @email],
          subject: 'Confirmación de pago')
   end
 
