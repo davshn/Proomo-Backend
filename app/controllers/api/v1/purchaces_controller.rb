@@ -188,7 +188,7 @@ class Api::V1::PurchacesController < ApplicationController
         user = User.find(params["user_id"])
         if !purchace.nil? && !user.nil?
           commerce = Commerce.find(user.commerce_ref)
-          if purchase.commerce_id == commerce.id
+          if purchace.commerce_id == commerce.id
             client = purchace.client
             render json: { data: purchace, meta: client },status: 201
           else
