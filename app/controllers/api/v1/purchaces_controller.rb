@@ -185,15 +185,21 @@ class Api::V1::PurchacesController < ApplicationController
     begin
       ActiveRecord::Base.transaction do
         purchace = Purchace.find_by(ticket_id: params["TicketId"].to_i)
-        if !purchace.nil?
+        user = User.find(params["user_id"])
+        if !purchace.nil? && !user.nil?
+          commerce = Commerce.find(user.commerce_ref)
+          if purchase.commerce_id == commerce.id
+            client = purchace.client
+            render json: { data: purchace, meta: client },status: 201
+          else
+            render json: { message: "La compra no pertenece al comercio #{commerce.name}" }, status: 400
+          end
           # resume = resume = {:create_at => purchase.created_at,
           #                    :ticket_id => purchase.ticket_id,
           #                    :total => purchase.total,
           #                    :first_name => purchase.client.first_name,
           #                    :last_name => purchase.client.last_name,
           #                    :email => purchase.client.email}
-          client = purchace.client
-          render json: { data: purchace, meta: client },status: 201
         else
           render json: { message: 'No se pudo encontrar la compra' }, status: 400
         end
