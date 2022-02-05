@@ -23,6 +23,7 @@ class Api::V1::PurchacesController < ApplicationController
       ActiveRecord::Base.transaction do
         Rails.logger.debug("create----->")
         purchace = Purchace.new(purchace_params)
+        Rails.logger.debug(purchace)
         #purchace = Purchace.new(state: params['state'],client_id: params['client_id'])
         #Rails.logger.debug("state , client_id  -----> ", params['state'] , params['client_id'])
         if purchace.save
