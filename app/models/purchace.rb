@@ -7,7 +7,8 @@ class Purchace < ApplicationRecord
       :state,
       :client_id,
       :offer_id,
-      :commerce_id
+      :commerce_id,
+      :user_payment_method
     ]
   end
 end
