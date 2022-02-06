@@ -46,7 +46,7 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(" purchace.save  -----> ")
           url = transaction[:data]['eCollectUrl']
           Rails.logger.debug(" url  -----> #{ url } ")
-          render json: { message: 'La Compra ha sido creado con éxito', url: url },status: 201
+          render json: { message: 'La Compra ha sido creado con éxito', url: url, purchace_id: purchace.id},status: 201
         else
           render json: { message: 'Ocurrió un error' }, status: 400
           Rails.logger.debug(" ELSE  -----> ")
