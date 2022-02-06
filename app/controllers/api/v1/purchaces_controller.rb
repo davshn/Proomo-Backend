@@ -134,30 +134,45 @@ class Api::V1::PurchacesController < ApplicationController
         if !purchase.nil? && !user.nil?
           commerce = Commerce.find(user.commerce_ref)
           if commerce && (commerce.id == purchase.commerce_id)
-            information = ColletModule.get_transaction_information(purchase.ticket_id)
-            Rails.logger.debug(information)
-            purchase.trazability_code = information[:data]['TrazabilityCode'].to_i
-            purchase.return_code = information[:data]['TranState'].to_s
-            purchase.state = information[:data]['ReturnCode'].to_s
-            purchase.trans_value = information[:data]['TransValue'].to_i
-            purchase.bank_process_date = information[:data]['BankProcessDate']
-            purchase.fi_code = information[:data]['FICode'].to_i
-            purchase.fi_name = information[:data]['FiName'].to_s
-            purchase.payment_system = information[:data]['PaymentSystem'].to_i
-            purchase.invoice = information[:data]['Invoice'].to_i
-            if purchase.state == "SUCCESS" && purchase.return_code == "OK"
+            if purchase.user_payment_method == 'online'
+              information = ColletModule.get_transaction_information(purchase.ticket_id)
+              Rails.logger.debug(information)
+              purchase.trazability_code = information[:data]['TrazabilityCode'].to_i
+              purchase.return_code = information[:data]['TranState'].to_s
+              purchase.state = information[:data]['ReturnCode'].to_s
+              purchase.trans_value = information[:data]['TransValue'].to_i
+              purchase.bank_process_date = information[:data]['BankProcessDate']
+              purchase.fi_code = information[:data]['FICode'].to_i
+              purchase.fi_name = information[:data]['FiName'].to_s
+              purchase.payment_system = information[:data]['PaymentSystem'].to_i
+              purchase.invoice = information[:data]['Invoice'].to_i
+              if purchase.state == "SUCCESS" && purchase.return_code == "OK"
+                purchase.validate_sale = true
+              else
+                purchase.validate_sale = false
+                purchase.state = information[:data]['TranState'].to_s
+              end
+              Rails.logger.debug(purchase)
+              purchase.save!
+              if purchase.validate_sale
+                render json: { message: 'La compra ha sido validada con éxito' },status: 201
+              else
+                render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
+              end
+            else
+              purchase.state == "SUCCESS"
+              purchase.return_code == "OK"
+              Rails.logger.debug("Purchace by cash")
+              Rails.logger.debug(purchase)
+              purchase.save!
               purchase.validate_sale = true
-            else
-              purchase.validate_sale = false
-              purchase.state = information[:data]['TranState'].to_s
+              if purchase.validate_sale
+                render json: { message: 'La compra ha sido validada con éxito' },status: 201
+              else
+                render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
+              end
             end
-            Rails.logger.debug(purchase)
-            purchase.save!
-            if purchase.validate_sale
-              render json: { message: 'La compra ha sido validada con éxito' },status: 201
-            else
-              render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
-            end
+
           else
             render json: { message: "Esta compra no pertenece al comercio #{commerce.name}" }, status: 400
           end
