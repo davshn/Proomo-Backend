@@ -160,8 +160,8 @@ class Api::V1::PurchacesController < ApplicationController
                 render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
               end
             else
-              purchase.state == "SUCCESS"
-              purchase.return_code == "OK"
+              purchase.state = "SUCCESS"
+              purchase.return_code = "OK"
               Rails.logger.debug("Purchace by cash")
               Rails.logger.debug(purchase)
               purchase.save!
