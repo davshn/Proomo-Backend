@@ -162,10 +162,10 @@ class Api::V1::PurchacesController < ApplicationController
             else
               purchase.state = "SUCCESS"
               purchase.return_code = "OK"
+              purchase.validate_sale = true
               Rails.logger.debug("Purchace by cash")
               Rails.logger.debug(purchase)
               purchase.save!
-              purchase.validate_sale = true
               if purchase.validate_sale
                 render json: { message: 'La compra ha sido validada con éxito' },status: 201
               else
