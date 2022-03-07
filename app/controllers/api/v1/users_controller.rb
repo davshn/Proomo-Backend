@@ -52,7 +52,7 @@ class Api::V1::UsersController < ApplicationController
 
   def get_points
     user = User.find(params[:id])
-    total_points = (user.purchaces.where(return_code:"OK", validate_sale: true).select{|x| x.total >= 10000}.inject(0){|sum,x| sum + x } / 10000)
+    total_points = (user.purchaces.where(return_code:"OK", validate_sale: true).select{|x| x.total >= 10000}.map{|x| x.total}.inject(0){|sum,x| sum + x } / 10000)
     spent_points = user.purchaces.where(return_code:"OK", validate_sale: true).select{|x| x.offer_id != nil}.map{|x| Offer.find(x.offer_id).points}.inject(0){|sum,x| sum + x }
     user.update(total_points: total_points, spent_points: spent_points)
     current_points = user.total_points - user.spent_points
