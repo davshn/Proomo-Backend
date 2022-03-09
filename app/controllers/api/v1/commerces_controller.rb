@@ -39,7 +39,7 @@ class Api::V1::CommercesController < ApplicationController
         commerce.update(commerce_params)
         commerce.update(category_ids: params[:data][:category_ids])
         if !params[:data][:user].nil?
-          user = User.find_by(commerce_ref: commerce.id)
+          user = User.find_by(email: params[:data][:user][:email])
           if user.nil?
             User.create(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password], commerce_ref: commerce.id)
           else
