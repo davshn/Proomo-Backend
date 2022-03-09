@@ -15,9 +15,10 @@ class Api::V1::CommercesController < ApplicationController
       ActiveRecord::Base.transaction do
         commerce = Commerce.new(commerce_params)
         commerce.category_ids = params[:data][:category_ids]
-        user = User.new(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password], commerce_ref: commerce.id)
+        user = User.new(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password])
         if commerce.valid? && user.valid?
           commerce.save!
+          user.commerce_ref = commerce.id
           user.save!
           user.add_role(:admin_brand)
           render json: { message: 'El comercio ha sido creado con éxito'}, status: 201
@@ -42,7 +43,7 @@ class Api::V1::CommercesController < ApplicationController
           if user.nil?
             User.create(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password], commerce_ref: commerce.id)
           else
-            user.update(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password])
+            user.update(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password], commerce_ref: commerce.id)
           end
         end
         render_json(
