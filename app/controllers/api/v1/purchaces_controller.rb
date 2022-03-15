@@ -46,7 +46,7 @@ class Api::V1::PurchacesController < ApplicationController
           Rails.logger.debug(" purchace.save  -----> ")
           url = transaction[:data]['eCollectUrl']
           Rails.logger.debug(" url  -----> #{ url } ")
-          render json: { message: 'La Compra ha sido creado con éxito', url: url, purchace_id: purchace.ticket_id},status: 201
+          render json: { message: 'Compra exitosa! Los puntos han sido cargados al comprador, serán efectivos en unas horas', url: url, purchace_id: purchace.ticket_id},status: 201
         else
           render json: { message: 'Ocurrió un error' }, status: 400
           Rails.logger.debug(" ELSE  -----> ")
@@ -110,9 +110,9 @@ class Api::V1::PurchacesController < ApplicationController
               commerce_email = 'tweniadmon@gmail.com'
             end
             if coupon.is_online_product
-              PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+              PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchace.total).deliver_now
             else
-              PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+              PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota")).deliver_now
             end
             render_json(
                 jsonapi: purchase,
@@ -156,6 +156,18 @@ class Api::V1::PurchacesController < ApplicationController
                 Rails.logger.debug(purchase)
                 purchase.save!
                 if purchase.validate_sale
+                  commerce = Commerce.find(purchase.commerce_id)
+                  if commerce.contact_email
+                    commerce_email = commerce.contact_email
+                  else
+                    commerce_email = 'tweniadmon@gmail.com'
+                  end
+                  coupon = Offer.find(purchase.offer_id)
+                  if coupon.is_online_product
+                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchace.total).deliver_now
+                  else
+                    PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota")).deliver_now
+                  end
                   render json: { message: 'La compra ha sido validada con éxito' },status: 201
                 else
                   render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
@@ -168,6 +180,17 @@ class Api::V1::PurchacesController < ApplicationController
                 Rails.logger.debug(purchase)
                 purchase.save!
                 if purchase.validate_sale
+                  commerce = Commerce.find(purchase.commerce_id)
+                  if commerce.contact_email
+                    commerce_email = commerce.contact_email
+                  else
+                    commerce_email = 'tweniadmon@gmail.com'
+                  end
+                  if coupon.is_online_product
+                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
+                  else
+                    PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total).deliver_now
+                  end
                   render json: { message: 'La compra ha sido validada con éxito' },status: 201
                 else
                   render json: { message: "No se pudo validar la compra, el estado del pago es: #{ purchase.state }" }, status: 400
