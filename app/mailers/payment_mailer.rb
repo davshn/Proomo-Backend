@@ -15,7 +15,7 @@ class PaymentMailer < ApplicationMailer
          subject: 'Confirmación de compra online')
   end
 
-  def confrim_payment(coupon_name, phone, email, name, commerce_email, value, payment_method, date)
+  def confirm_payment(coupon_name, phone, email, name, commerce_email, value, payment_method, date)
     @coupon_name = coupon_name
     @phone = phone
     @email = email
