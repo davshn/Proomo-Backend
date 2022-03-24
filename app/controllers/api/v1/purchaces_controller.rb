@@ -164,7 +164,7 @@ class Api::V1::PurchacesController < ApplicationController
                   end
                   coupon = Offer.find(purchase.offer_id)
                   if coupon.is_online_product
-                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchace.total).deliver_now
+                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchase.total).deliver_now
                   else
                     PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota")).deliver_now
                   end
@@ -188,7 +188,7 @@ class Api::V1::PurchacesController < ApplicationController
                   end
                   coupon = Offer.find(purchase.offer_id)
                   if coupon.is_online_product
-                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchace.total).deliver_now
+                    PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota"), purchase.total).deliver_now
                   else
                     PaymentMailer.confirm_payment(coupon.title, user.phone, user.email, user.first_name, commerce_email, purchase.total, purchase.user_payment_method, purchase.updated_at.in_time_zone("America/Bogota")).deliver_now
                   end
