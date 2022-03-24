@@ -186,6 +186,7 @@ class Api::V1::PurchacesController < ApplicationController
                   else
                     commerce_email = 'tweniadmon@gmail.com'
                   end
+                  coupon = Offer.find(purchase.offer_id)
                   if coupon.is_online_product
                     PaymentMailer.confirm_online_promo(coupon.title, user.phone, user.email, user.first_name, commerce_email).deliver_now
                   else
