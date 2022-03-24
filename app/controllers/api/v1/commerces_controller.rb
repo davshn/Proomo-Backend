@@ -39,7 +39,7 @@ class Api::V1::CommercesController < ApplicationController
         commerce.update(commerce_params)
         commerce.update(category_ids: params[:data][:category_ids])
         if !params[:data][:user].nil?
-          user = User.find_by(email: params[:data][:user][:email])
+          user = User.find_by(email: commerce.id)
           if user.nil?
             User.create(email: params[:data][:user][:email], password: params[:data][:user][:password], password_confirmation: params[:data][:user][:password], commerce_ref: commerce.id)
           else
@@ -149,7 +149,7 @@ class Api::V1::CommercesController < ApplicationController
       reports = []
       commerces = Commerce.all
       commerces.each do |commerce|
-        reports << Purchace.where(commerce_id: commerce.id, updated_at: date_active).map{|x| [commerce.name, commerce.city, commerce.partner.documment, commerce.partner.name, (x.client.first_name + ' ' + x.client.last_name), x.client.email, x.client.phone, x.ticket_id, x.state, x.total, x.created_at, commerce.nit ? commerce.nit : '', (x.total * 0.06), x.user_payment_method]}
+        reports << Purchace.where(commerce_id: commerce.id, updated_at: date_active).map{|x| [ x.created_at.in_time_zone("America/Bogota").strftime("%d de %B, %Y a las %I:%M %p"), commerce.name, commerce.city, commerce.nit, commerce.partner.name, commerce.partner.documment, commerce.partner.partner_id.nil? ? '' : Partner.find(commerce.partner.partner_id.to_i).name, commerce.partner.partner_id.nil? ? '' : Partner.find(commerce.partner.partner_id.to_i).documment, commerce.contact_email, x.ticket_id, x.state, x.total, x.user_payment_method, (x.total * 0.06)]}
       end
       @reports = reports.reject(&:empty?)
       render_json(
