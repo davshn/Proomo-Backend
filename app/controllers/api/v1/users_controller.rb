@@ -27,11 +27,11 @@ class Api::V1::UsersController < ApplicationController
       )
     else
       if @user == nil
-        render json: { errors: "No se encuentro el usurio en nuesto sistema" }, status: 422
+        render json: { errors: "Este usuario no se encuentra registrado en nuestro sistema" }, status: 422
       elsif @user.valid_password?(params[:data][:attributes][:password])
         render json: { errors: "La contraseña no corresponde a este usuario" }, status: 422
       elsif @user.has_role?(:client)
-        render json: { errors: "Este usuario no es valido" }, status: 422
+        render json: { errors: "La contraseña no corresponde a este usuario" }, status: 422
       end
     end
   end
