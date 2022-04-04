@@ -30,6 +30,7 @@ Rails.application.routes.draw do
       post '/save_favorites' => 'users#save_favorites'
       get '/user_favorites/:id' => 'users#user_favorites'
       get '/find_commerce_by_category/:id' => 'commerces#find_commerce_by_category'
+      get '/find_commerce_by_category_points/:id' => 'commerces#find_commerce_by_category_points'
       get  '/index_subcategories' => 'categories#index_subcategories'
       put  '/destroy_category/:id' => 'categories#destroy_category'
       get '/generate_reports' => 'commerces#generate_reports'

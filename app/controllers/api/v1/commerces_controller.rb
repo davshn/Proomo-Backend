@@ -118,6 +118,25 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def find_commerce_by_category_points
+    begin
+      ActiveRecord::Base.transaction do
+        # commerces = Category.find(params[:id]).commerces
+        commerces = Category.find(params[:id]).offers.where(by_points:true).map{|x| x.commerce}.uniq
+        if params[:city]
+          commerces = commerces.select{|x| x.city == params[:city]}
+        end
+        # render json: {data: commerce}, status: 200
+        render_json(
+            jsonapi: commerces,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
   def search_by_date
     begin
       ActiveRecord::Base.transaction do
