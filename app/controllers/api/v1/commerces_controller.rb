@@ -82,6 +82,23 @@ class Api::V1::CommercesController < ApplicationController
     end
   end
 
+  def commerce_with_points
+    begin
+      ActiveRecord::Base.transaction do
+        commerce = Commerce.find(params[:id])
+        # render json: {data: commerce}, status: 200
+        category_cupons = commerce.offers.where(by_points: true).map{|x| [x.id, x.categories.map{|y| [y.name, y.id]}]}
+        render_json(
+            jsonapi: commerce,
+            meta: category_cupons,
+            status: 200
+        )
+      end
+    rescue
+      raise
+    end
+  end
+
   def find_coupons
     begin
       ActiveRecord::Base.transaction do

@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       get '/get_index' => 'offers#get_index'
       get '/get_current_city' => 'users#get_current_city'
       get '/search_by_date/:id' => 'commerces#search_by_date'
+      get '/commerce_with_points/:id' => 'commerces#commerce_with_points'
     end
   end
   devise_for :users
